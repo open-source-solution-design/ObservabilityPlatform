@@ -1,0 +1,146 @@
+# Default values for ..
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+global:
+  domain: onwalk.net
+  namespace: monitoring
+  secretName: observable-server-tls
+deepflow:
+  enabled: true
+  grafana:
+    enabled: true
+    ingress:
+      enabled: true
+      ingressClassName: nginx
+      hosts:
+        - grafana.onwalk.net
+      tls:
+        - secretName: observable-server-tls
+          hosts:
+            - grafana.onwalk.net
+neo4j:
+  enabled: false
+grafana:
+  enabled: false
+loki-distributed:
+  enabled: false
+  ruler:
+    enabled: true
+  gateway:
+    enabled: false
+  ingress:
+    enabled: true
+    ingressClassName: nginx
+    hosts:
+      - loki.onwalk.net
+    tls:
+      - secretName: observable-server-tls
+        hosts:
+          - loki.onwalk.net
+prometheus:
+  enabled: true
+  alertmanager:
+    enabled: false
+  prometheus-pushgateway:
+    enabled: false
+  server:
+    ingress:
+      ingressClassName: nginx
+      hosts:
+        - prometheus.onwalk.net
+      tls:
+        - secretName: observable-server-tls
+          hosts:
+            - prometheus.onwalk.net
+    alertmanagers:
+    - static_configs:
+      - targets:
+        - alertmanager.onwalk.net
+  serverFiles:
+    prometheus.yml:
+      rule_files:
+        - /etc/config/recording_rules.yml
+        - /etc/config/alerting_rules.yml
+alertmanger:
+  enabled: true
+  ingress:
+    enabled: true
+    className: "nginx"
+    hosts:
+      - host: alertmanager.onwalk.net
+    tls:
+       - secretName: observable-server-tls
+         hosts:
+           - alertmanager.onwalk.net
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+  port: 80
+
+ingress:
+  enabled: false
+  className: ""
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

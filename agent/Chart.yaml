@@ -1,0 +1,26 @@
+name: observabilityagent
+type: application
+version: 0.1.4
+apiVersion: v2
+description: A Helm chart for Observable Stack agent
+dependencies:
+- name: deepflow-agent
+  condition: deepflow-agent.enabled
+  version: "6.1.8"
+  repository: "https://deepflowys.github.io/deepflow"
+- name: grafana-agent-operator
+  condition: grafana-agent.enabled
+  version: "0.2.8"
+  repository: "https://grafana.github.io/helm-charts"
+- name: fluent-bit
+  condition: fluent-bit.enabled
+  version: "0.21.6"
+  repository: "https://fluent.github.io/helm-charts"
+- name: prometheus
+  condition: prometheus.enabled
+  version: "19.0.1"
+  repository: "https://prometheus-community.github.io/helm-charts"
+- name: kube-state-metrics
+  condition: kube-state-metrics.enabled
+  version: "4.24.0"
+  repository: "https://prometheus-community.github.io/helm-charts"

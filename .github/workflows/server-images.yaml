@@ -1,0 +1,41 @@
+name: Sync Images
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  pull_request:
+  push:
+    paths:
+      - '.github/workflows/images.yaml'
+  workflow_dispatch:
+    branches:
+      - main
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@main
+      with:
+        ref: ${{ github.head_ref }}
+
+    - name: Initialization environment
+      env:
+        REPO_PASSWORD: ${{ secrets.HELM_REPO_PASSWORD }}
+      shell: bash
+      run: |
+        sudo apt update 
+        sudo apt install git -y
+        sudo timedatectl set-timezone "$TZ"
+        echo "$REPO_PASSWORD" | docker login --username=admin --password-stdin artifact.onwalk.net
+
+    - name: Sync images
+      shell: bash
+      run: |
+        docker pull fstab/aws-cli:latest 
+        docker tag  fstab/aws-cli:latest artifact.onwalk.net/public/aws-cli:latest
+        docker push artifact.onwalk.net/public/aws-cli:latest

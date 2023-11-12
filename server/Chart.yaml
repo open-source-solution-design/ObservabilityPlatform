@@ -1,0 +1,26 @@
+name: observableserver
+type: application
+version: 0.1.4
+apiVersion: v2
+description: A Helm chart for Observable Server
+dependencies:
+- name: neo4j
+  condition: neo4j.enabled
+  version: "5.3.0"
+  repository: "https://helm.neo4j.com/neo4j"
+- name: grafana
+  condition: grafana.enabled
+  version: "6.48.0"
+  repository: "https://grafana.github.io/helm-charts"
+- name: deepflow
+  condition: deepflow.enabled
+  version: "6.1.8"
+  repository: "https://deepflowys.github.io/deepflow"
+- name: prometheus
+  condition: prometheus.enabled
+  version: "19.0.1"
+  repository: "https://prometheus-community.github.io/helm-charts"
+- name: alertmanager
+  condition: alertmanger.enabled
+  version: "0.22.2"
+  repository: "https://prometheus-community.github.io/helm-charts"
