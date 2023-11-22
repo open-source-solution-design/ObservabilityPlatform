@@ -64,6 +64,7 @@ jobs:
         cd ${GITHUB_WORKSPACE}/charts && rm -rvf deepflow-agent ; helm fetch deepflow/deepflow-agent --untar
         cd ${GITHUB_WORKSPACE}/charts && rm -rvf prometheus ; helm fetch prometheus-community/prometheus --version=18.4.0 --untar
         cd ${GITHUB_WORKSPACE}/charts && rm -rvf grafana-agent-operator ; helm fetch grafana/grafana-agent-operator --untar
+        cd ${GITHUB_WORKSPACE}/charts && rm -rvf promtail ; helm fetch grafana/promtail --untar
         cd ${GITHUB_WORKSPACE}/charts && rm -rvf kube-state-metrics ; helm fetch prometheus-community/kube-state-metrics --untar
         cd ${GITHUB_WORKSPACE}/charts && rm *.tgz -f
         cd ${GITHUB_WORKSPACE}/ && helm package ./ &&  helm cm-push observabilityagent-${TAG}.tgz sync
