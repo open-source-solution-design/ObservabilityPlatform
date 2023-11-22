@@ -43,6 +43,6 @@ EOF
 node_name=`kubectl get nodes | awk 'NR>1 {print $1}'`
 kubectl create namespace monitoring || echo true
 kubectl label nodes $node prometheus=true --overwrite || echo true
-helm repo add stable https://artifact.onwalk.net/chartrepo/public/ || echo true
+helm repo add stable https://charts.onwalk.net/ || echo true
 helm repo update
 helm upgrade --install observableagent stable/observabilityagent -n monitoring -f values.yaml

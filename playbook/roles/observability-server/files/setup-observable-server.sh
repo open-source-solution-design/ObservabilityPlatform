@@ -116,7 +116,7 @@ alertmanager:
       repeat_interval: 1h
 EOF
 
-helm repo add stable https://artifact.onwalk.net/chartrepo/public/ || echo true
+helm repo add stable https://charts.onwalk.net/ || echo true
 helm repo update
-kubectl delete deploy  observability-server-prometheus-server -n ${namespace} || echo true
+kubectl delete deploy  observability-server -n ${namespace} || echo true
 helm upgrade --install observability-server stable/observableserver -n ${namespace} -f values.yaml
