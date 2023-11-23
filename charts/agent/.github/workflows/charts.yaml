@@ -1,0 +1,81 @@
+name: BUILD Chart
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  pull_request:
+  push:
+    paths:
+      - 'charts'
+      - 'templates'
+      - 'Chart.yaml'
+      - 'values.yaml'
+      - '.github/workflows/charts.yaml'
+  workflow_dispatch:
+    branches:
+      - main
+
+env:
+  REPO_URL: https://github.com/solo-cat/ObservableAgent.git 
+  REPO_BRANCH: main
+  TZ: Asia/Shanghai
+  TAG: 0.1.4 
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@main
+      with:
+        ref: ${{ github.head_ref }}
+
+    - name: Initialization environment
+      env:
+        DEBIAN_FRONTEND: noninteractive
+        REPO_PASSWORD: ${{ secrets.HELM_REPO_PASSWORD }}
+      shell: bash
+      run: |
+        sudo apt update 
+        sudo apt install git -y
+        sudo timedatectl set-timezone "$TZ"
+        sudo curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        helm plugin install https://github.com/chartmuseum/helm-push.git
+        helm repo add fluent https://fluent.github.io/helm-charts
+        helm repo add grafana https://grafana.github.io/helm-charts
+        helm repo add deepflow https://deepflowio.github.io/deepflow
+        helm repo add kube-state-metrics https://kubernetes.github.io/kube-state-metrics
+        helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+        echo "$REPO_PASSWORD" | helm repo add sync --username=admin --password-stdin https://artifact.onwalk.net/chartrepo/public/
+        echo "$REPO_PASSWORD" | docker login --username=admin --password-stdin artifact.onwalk.net
+        helm repo up
+
+    - name: Clone Source
+      shell: bash
+      run: |
+        git clone $REPO_URL -b $REPO_BRANCH
+
+    - name: Build and Push chart
+      shell: bash
+      run: |
+        echo ${GITHUB_WORKSPACE}
+        cd ${GITHUB_WORKSPACE}/ && ls -l && mkdir -pv charts/
+        cd ${GITHUB_WORKSPACE}/charts && rm -rvf fluent-bit ; helm fetch fluent/fluent-bit --untar
+        cd ${GITHUB_WORKSPACE}/charts && rm -rvf deepflow-agent ; helm fetch deepflow/deepflow-agent --untar
+        cd ${GITHUB_WORKSPACE}/charts && rm -rvf prometheus ; helm fetch prometheus-community/prometheus --version=18.4.0 --untar
+        cd ${GITHUB_WORKSPACE}/charts && rm -rvf grafana-agent-operator ; helm fetch grafana/grafana-agent-operator --untar
+        cd ${GITHUB_WORKSPACE}/charts && rm -rvf promtail ; helm fetch grafana/promtail --untar
+        cd ${GITHUB_WORKSPACE}/charts && rm -rvf kube-state-metrics ; helm fetch prometheus-community/kube-state-metrics --untar
+        cd ${GITHUB_WORKSPACE}/charts && rm *.tgz -f
+        cd ${GITHUB_WORKSPACE}/ && helm package ./ &&  helm cm-push observabilityagent-${TAG}.tgz sync
+
+    - name: Merge Upstream Repo
+      shell: bash
+      run: |
+        git config user.name shenlan
+        git config user.email manbuzhe2009@qq.com
+        cd ${GITHUB_WORKSPACE}/ && rm *.tgz -f
+        rm -rvf ${GITHUB_WORKSPACE}/charts/*
+        git add -A
+        git commit -a -m "Auto Merged"
+        git push
