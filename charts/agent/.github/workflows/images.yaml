@@ -1,0 +1,65 @@
+name: Sync Images
+
+on:
+  schedule:
+    - cron: "0 0 * * *"
+  pull_request:
+  push:
+    paths:
+      - '.github/workflows/images.yaml'
+  workflow_dispatch:
+    branches:
+      - main
+
+env:
+  TZ: Asia/Shanghai
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@main
+      with:
+        ref: ${{ github.head_ref }}
+
+    - name: Initialization environment
+      env:
+        REPO_PASSWORD: ${{ secrets.HELM_REPO_PASSWORD }}
+      shell: bash
+      run: |
+        sudo apt update 
+        sudo apt install git -y
+        sudo timedatectl set-timezone "$TZ"
+        echo "$REPO_PASSWORD" | docker login --username=admin --password-stdin artifact.onwalk.net
+
+    - name: Sync images
+      shell: bash
+      run: |
+        docker pull registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.7.0
+        docker tag  registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.7.0 artifact.onwalk.net/public/kube-state-metrics:v2.7.0
+        docker push artifact.onwalk.net/public/kube-state-metrics:v2.7.0
+
+        docker pull fstab/aws-cli:latest 
+        docker tag  fstab/aws-cli:latest artifact.onwalk.net/public/aws-cli:latest
+        docker push artifact.onwalk.net/public/aws-cli:latest
+
+        docker pull fluent/fluent-bit:2.0.8
+        docker tag  fluent/fluent-bit:2.0.8 artifact.onwalk.net/public/fluent-bit:2.0.8
+        docker push artifact.onwalk.net/public/fluent-bit:2.0.8
+
+        docker pull amazon/aws-for-fluent-bit:2.29.0
+        docker tag  amazon/aws-for-fluent-bit:2.29.0 artifact.onwalk.net/public/aws-for-fluent-bit:2.29.0
+        docker push artifact.onwalk.net/public/aws-for-fluent-bit:2.29.0
+
+        docker pull alpine:latest
+        docker tag  alpine:latest artifact.onwalk.net/public/alpine:latest
+        docker push artifact.onwalk.net/public/alpine:latest
+
+        docker pull amazonlinux:latest
+        docker tag  amazonlinux:latest artifact.onwalk.net/public/amazonlinux:latest
+        docker push artifact.onwalk.net/public/amazonlinux:latest
+
+        docker pull public.gcr.io/metrics-server/metrics-server:v0.6.2
+        docker tag  public.gcr.io/metrics-server/metrics-server:v0.6.2 artifact.onwalk.net/public/metrics-server:v0.6.2
+        docker push artifact.onwalk.net/public/metrics-server:v0.6.2

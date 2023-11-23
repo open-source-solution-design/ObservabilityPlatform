@@ -198,6 +198,34 @@ jobs:
           sudo chmod 0400 ~/.ssh/id_rsa
           md5sum ~/.ssh/id_rsa
 
+
+      - name: Deploy Observability Server
+        shell: bash
+        run: |
+          export ANSIBLE_HOST_KEY_CHECKING=False
+
+          mkdir -pv hosts/
+          cat > hosts/server << EOF
+          [master]
+          ${{ secrets.HOST_DOMAIN }}               ansible_host=${{ secrets.HOST_IP }}
+
+          [all:vars]
+          ansible_port=22
+          ansible_ssh_user=${{ secrets.HOST_USER }}
+          ansible_ssh_private_key_file=~/.ssh/id_rsa
+          ansible_host_key_checking=False
+          admin_password=$PASSWORD
+          dns_ak=$DNS_AK
+          dns_sk=$DNS_SK
+          EOF
+
+          ansible-playbook -i hosts/server init_observability-server -D
+
+      - name: Deploy Observability Agent
+        shell: bash
+        run: |
+          export ANSIBLE_HOST_KEY_CHECKING=False
+
           mkdir -pv hosts/
           cat > hosts/k3s << EOF
           [master]
@@ -213,14 +241,4 @@ jobs:
           dns_sk=$DNS_SK
           EOF
 
-      - name: Deploy Observability Server
-        shell: bash
-        run: |
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i hosts/k3s init_observability-server -D
-
-      - name: Deploy Observability Agent
-        shell: bash
-        run: |
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i hosts/k3s init_observability-agent -D
+          ansible-playbook -i hosts/k3s init_observability-agent -D -C
