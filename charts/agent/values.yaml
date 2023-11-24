@@ -10,6 +10,11 @@ grafana-agent:
     tag: v6.2
 prometheus:
   enabled: true
+promtail:
+  enabled: true
+  config:
+    clients:
+      - url: http://data-gateway.onwalk.net:3100/loki/api/v1/push
 deepflow-agent:
   enabled: true
   image:
