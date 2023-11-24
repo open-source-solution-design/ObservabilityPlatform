@@ -19,3 +19,14 @@ ObservabilityPlatform is an observability solution based on PromQL, LogQL, and o
   - prometheus-transfer: 转发 Prometheus 将指标传输到远程存储。
   - promtail-agent: 部署 Promtail 从节点收集日志。
 
+# API Endpoint
+
+| name | URI |
+| ---  | --- |
+| querying(promql, logql, tempo) | http://data-gateway.<domian>:3100                  |
+| metrics_query                  | https://prometheus.<domian>                        |
+| metrics_remote_write           | prometheus.<domian>/api/v1/remote/write            |
+| logql_remote_write             | http://data-gateway.<domian>:3100/loki/api/v1/push |
+| traces_tempo_push              | http://data-gateway.<domian>:3100/tempo/api/push   |
+| traces_zipkin_push             | http://data-gateway.<domian>:3100/api/v2/spans     |
+| traces_oltp_push               | http://data-gateway.<domian>:3100/v1/traces        |
