@@ -20,9 +20,12 @@ deepflow:
           hosts:
             - grafana.onwalk.net
 neo4j:
+  enabled: true
   neo4j:
     name: neo4j
-  enabled: true
+  volumes:
+    data:
+      mode: "defaultStorageClass"
 grafana:
   enabled: false
 prometheus:
