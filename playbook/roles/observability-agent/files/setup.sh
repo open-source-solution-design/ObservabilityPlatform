@@ -26,6 +26,11 @@ prometheus:
     enabled: false
   rometheus-pushgateway:
     enabled: false
+promtail:
+  enabled: true
+  config:
+    clients:
+      - url: http://${observableserver}:3100/loki/api/v1/push
 fluent-bit:
   enabled: false
   logLevel: debug
