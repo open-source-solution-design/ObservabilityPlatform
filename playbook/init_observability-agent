@@ -11,5 +11,5 @@
         namespace: monitoring
         observableserver: prometheus.onwalk.net
         port: 3100
-        deepflowserverip: 34.85.43.134
-        deepflowserverid: d-N5rfICv2PS
+        deepflowserverip: 10.146.0.8
+        deepflowserverid: d-Mny2Qcr3C4

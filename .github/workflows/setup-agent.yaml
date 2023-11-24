@@ -1,4 +1,4 @@
-name: Sync And Deploy
+name: Only Setup Agent 
 
 on:
   pull_request:
@@ -25,7 +25,7 @@ env:
   HELM_EXPERIMENTAL_OCI: 1
 
 jobs:
-  setu-agent:
+  setup-agent:
     runs-on: ubuntu-latest
 
     steps:
