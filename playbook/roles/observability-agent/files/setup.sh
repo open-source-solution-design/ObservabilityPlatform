@@ -3,7 +3,7 @@ set -x
 export observableserver=$1
 export port=$2
 export deepflowserverip=$3
-export deepflowserverid=$4
+export deepflowk8sclusterid=$4
 
 cat > values.yaml << EOF
 kube-state-metrics:
@@ -12,7 +12,7 @@ deepflow-agent:
   enabled: true
   deepflowServerNodeIPS:
     - $deepflowserverip
-  deepflowK8sClusterID: $deepflowserverid
+  deepflowK8sClusterID: $deepflowk8sclusterid
 prometheus:
   enabled: true
   server:
@@ -27,7 +27,7 @@ prometheus:
   rometheus-pushgateway:
     enabled: false
 fluent-bit:
-  enabled: true
+  enabled: false
   logLevel: debug
   config:
     outputs: |
