@@ -54,7 +54,7 @@ jobs:
         ls -l ; mkdir -pv charts/ && cd charts/
         rm -rvf neo4j ; helm fetch neo4j/neo4j --untar
         rm -rvf grafana ; helm fetch grafana/grafana --untar
-        rm -rvf deepflow ; helm fetch deepflow/deepflow --version=6.2.0 --untar
+        rm -rvf deepflow ; helm fetch deepflow/deepflow --version 6.2.6 --untar
         rm -rvf prometheus ; helm fetch prometheus-community/prometheus  --untar
         rm -rvf alertmanager ; helm fetch prometheus-community/alertmanager --untar
         ls -l && rm *.tgz -f
@@ -75,7 +75,7 @@ jobs:
         ls -l ; mkdir -pv charts/ && cd charts/
         rm -rvf promtail ; helm fetch grafana/promtail --untar
         rm -rvf fluent-bit ; helm fetch fluent/fluent-bit --untar
-        rm -rvf deepflow-agent ; helm fetch deepflow/deepflow-agent --untar
+        rm -rvf deepflow-agent ; helm fetch deepflow/deepflow-agent --version 6.2.6 --untar
         rm -rvf grafana-agent-operator ; helm fetch grafana/grafana-agent-operator --untar
         rm -rvf kube-state-metrics ; helm fetch prometheus-community/kube-state-metrics --untar
         rm -rvf prometheus ; helm fetch prometheus-community/prometheus --version=18.4.0 --untar
