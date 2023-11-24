@@ -11,9 +11,14 @@
     - clickhouse-cluster/clickhouse-service.yaml
     - clickhouse-cluster/clickhouse-user-config.yaml
     - clickhouse-cluster/clickhouse-statefulset.yml
+    - postsetup.sh
 
 - name: Setup ClickHouse Server
   shell: "cd /tmp/clickhouse-cluster && kubectl apply -f ."
+  when: inventory_hostname in groups[group]
+
+- name: Post Setup ClickHouse Server
+  shell: "cd /tmp/ && sh postsetup.sh"
   when: inventory_hostname in groups[group]
 
 - name: get clickhouse node ip
