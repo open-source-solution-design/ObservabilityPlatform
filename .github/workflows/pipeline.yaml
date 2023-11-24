@@ -125,6 +125,10 @@ jobs:
         docker tag  registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.7.0 artifact.onwalk.net/public/kube-state-metrics:v2.7.0
         docker push artifact.onwalk.net/public/kube-state-metrics:v2.7.0
 
+        docker pull ghcr.io/deepflowio/deepflow-ce/deepflow-agent:v6.2-8427@sha256:ffec192f8f249160fab600dab939ee150c067b4b1900378da247b748073b256e 
+        docker tag ghcr.io/deepflowio/deepflow-ce/deepflow-agent:v6.2-8427@sha256:ffec192f8f249160fab600dab939ee150c067b4b1900378da247b748073b256e artifact.onwalk.net/public/deepflow-agent:v6.2
+        docker push artifact.onwalk.net/public/deepflow-agent:v6.2
+
   test:
     runs-on: ubuntu-latest
 
@@ -178,7 +182,9 @@ jobs:
           ansible-playbook -i hosts/inventory init_k3s_cluster_std -D
   deploy-app:
     runs-on: ubuntu-latest
-    needs: [setup-k3s]
+    needs:
+      - setup-k3s
+      - sync-images
 
     steps:
       - uses: actions/checkout@v3

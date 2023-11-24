@@ -4,10 +4,18 @@
 
 grafana-agent:
   enabled: false
+  image:
+    repository: artifact.onwalk.net/public/deepflow-agent
+    pullPolicy: Always
+    tag: v6.2
 prometheus:
   enabled: true
 deepflow-agent:
   enabled: true
+  image:
+    repository: artifact.onwalk.net/public/deepflow-agent
+    pullPolicy: Always
+    tag: v6.2
 kube-state-metrics:
   enabled: true
 fluent-bit:

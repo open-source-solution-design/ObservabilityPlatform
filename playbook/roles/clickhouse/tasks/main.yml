@@ -17,9 +17,9 @@
   shell: "cd /tmp/clickhouse-cluster && kubectl apply -f ."
   when: inventory_hostname in groups[group]
 
-- name: Post Setup ClickHouse Server
-  shell: "cd /tmp/ && sh postsetup.sh"
-  when: inventory_hostname in groups[group]
+#- name: Post Setup ClickHouse Server
+#  shell: "cd /tmp/ && sh postsetup.sh"
+#  when: inventory_hostname in groups[group]
 
 - name: get clickhouse node ip
   shell: "kubectl  get pods -n clickhouse -o wide | grep  clickhouse  | awk '{print $6}'"
