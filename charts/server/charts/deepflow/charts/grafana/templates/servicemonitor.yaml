@@ -34,6 +34,10 @@ spec:
     relabelings:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+    {{- with .Values.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
   jobLabel: "{{ .Release.Name }}"
   selector:
     matchLabels:
@@ -41,4 +45,8 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ include "grafana.namespace" . }}
+  {{- with .Values.serviceMonitor.targetLabels }}
+  targetLabels:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 {{- end }}
