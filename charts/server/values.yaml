@@ -20,24 +20,9 @@ deepflow:
           hosts:
             - grafana.onwalk.net
 neo4j:
-  enabled: false
+  enabled: true
 grafana:
   enabled: false
-loki-distributed:
-  enabled: false
-  ruler:
-    enabled: true
-  gateway:
-    enabled: false
-  ingress:
-    enabled: true
-    ingressClassName: nginx
-    hosts:
-      - loki.onwalk.net
-    tls:
-      - secretName: observable-server-tls
-        hosts:
-          - loki.onwalk.net
 prometheus:
   enabled: true
   alertmanager:
