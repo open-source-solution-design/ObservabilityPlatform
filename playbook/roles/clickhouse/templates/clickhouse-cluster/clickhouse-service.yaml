@@ -4,7 +4,7 @@ metadata:
   labels:
     app: clickhouse
   name: clickhouse-service
-  namespace: clickhouse
+  namespace: monitoring
 spec:
   ports:
     - name: rest

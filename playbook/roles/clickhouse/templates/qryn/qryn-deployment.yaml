@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: qryn
-  namespace: clickhouse
+  namespace: monitoring
   labels:
     io.metrico.service: qryn
 spec:

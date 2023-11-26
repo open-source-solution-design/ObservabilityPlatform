@@ -9,7 +9,6 @@
       vars:
         group: master
         namespace: monitoring
-        observableserver: prometheus.onwalk.net
-        port: 3100
+        observableserver: data-gateway.onwalk.net 
         deepflowserverip: 10.146.0.8
         deepflowk8sclusterid: d-kqjofXyZbg 

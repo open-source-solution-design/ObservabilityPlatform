@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: clickhouse-config
-  namespace: clickhouse
+  namespace: monitoring
 data:
   keeper.xml: |
     <?xml version="1.0"?>

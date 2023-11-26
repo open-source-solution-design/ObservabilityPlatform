@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: clickhouse
-  namespace: clickhouse
+  namespace: monitoring
 spec:
   ingressClassName: nginx
   rules:

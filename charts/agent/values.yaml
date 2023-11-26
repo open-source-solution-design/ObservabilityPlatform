@@ -14,7 +14,7 @@ promtail:
   enabled: true
   config:
     clients:
-      - url: http://data-gateway.onwalk.net:3100/loki/api/v1/push
+      - url: https://data-gateway.onwalk.net/loki/api/v1/push
 deepflow-agent:
   enabled: true
   image:

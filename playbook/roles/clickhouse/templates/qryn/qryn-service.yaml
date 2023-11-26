@@ -5,7 +5,7 @@ metadata:
   labels:
     io.metrico.service: qryn
   name: qryn
-  namespace: clickhouse
+  namespace: monitoring
 spec:
   ports:
     - name: "3100"

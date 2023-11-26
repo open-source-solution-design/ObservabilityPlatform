@@ -30,7 +30,7 @@ promtail:
   enabled: true
   config:
     clients:
-      - url: http://${observableserver}:3100/loki/api/v1/push
+      - url: http://${observableserver}/loki/api/v1/push
 fluent-bit:
   enabled: false
   logLevel: debug
