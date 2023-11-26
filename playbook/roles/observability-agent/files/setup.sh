@@ -1,9 +1,8 @@
 #!/bin/bash
 set -x
 export observableserver=$1
-export port=$2
-export deepflowserverip=$3
-export deepflowk8sclusterid=$4
+export deepflowserverip=$2
+export deepflowk8sclusterid=$3
 
 cat > values.yaml << EOF
 kube-state-metrics:
