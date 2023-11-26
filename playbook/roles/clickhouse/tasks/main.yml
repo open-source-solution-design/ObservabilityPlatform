@@ -2,7 +2,7 @@
   shell: "mkdir -pv /tmp/clickhouse-cluster/ && mkdir -pv /tmp/qryn"
 
 - name: Prep NameSpace
-  shell: "kubectl create namespace clickhouse || echo true"
+  shell: "kubectl create namespace monitoring || echo true"
 
 - name: sync clickhouse deploy yaml
   template: src=templates/{{ item }}  dest=/tmp/{{ item }} owner=root group=root mode=0644 force=yes unsafe_writes=yes
@@ -22,7 +22,7 @@
 #  when: inventory_hostname in groups[group]
 
 - name: get clickhouse node ip
-  shell: "kubectl  get pods -n clickhouse -o wide | grep  clickhouse  | awk '{print $6}'"
+  shell: "kubectl  get pods -n monitoring -o wide | grep  clickhouse  | awk '{print $6}'"
   register: ck_node_ip_raw
   when: inventory_hostname in groups[group][0]
 

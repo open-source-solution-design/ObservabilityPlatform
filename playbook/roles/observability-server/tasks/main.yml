@@ -9,7 +9,7 @@
   when: inventory_hostname in groups[group][0]
 
 - name: get clickhouse node ips
-  shell: "kubectl  get pods -n clickhouse -o wide | grep  clickhouse  | awk '{print $6}'"
+  shell: "kubectl  get pods -n monitoring -o wide | grep  clickhouse  | awk '{print $6}'"
   register: ck_node_ips_raw
   when: inventory_hostname in groups[group][0]
 

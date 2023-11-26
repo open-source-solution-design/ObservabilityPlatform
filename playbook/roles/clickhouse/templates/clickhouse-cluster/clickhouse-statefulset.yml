@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: clickhouse
-  namespace: clickhouse
+  namespace: monitoring
 spec:
   selector:
     matchLabels:
