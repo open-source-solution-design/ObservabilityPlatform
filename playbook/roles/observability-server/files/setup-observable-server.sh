@@ -120,3 +120,5 @@ helm repo add stable https://charts.onwalk.net/ || echo true
 helm repo update
 kubectl delete deploy  observability-server -n ${namespace} || echo true
 helm upgrade --install observability-server stable/observableserver -n ${namespace} -f values.yaml
+sudo curl -o /usr/bin/deepflow-ctl https://deepflow-ce.oss-cn-beijing.aliyuncs.com/bin/ctl/stable/linux/$(arch | sed 's|x86_64|amd64|' | sed 's|aarch64|arm64|')/deepflow-ctl
+sudo chmod a+x /usr/bin/deepflow-ctl
