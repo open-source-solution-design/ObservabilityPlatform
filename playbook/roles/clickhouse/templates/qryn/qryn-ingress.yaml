@@ -3,6 +3,8 @@ kind: Ingress
 metadata:
   name: data-gateway
   namespace: monitoring
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
   ingressClassName: nginx
   rules:
