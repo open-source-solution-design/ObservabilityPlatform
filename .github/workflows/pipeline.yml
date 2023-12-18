@@ -236,6 +236,8 @@ jobs:
       - build
       - test
       - vhost
+    env:
+      SSH_HOST_DOMAIN: ${{ secrets.SERVER_HOST_DOMAIN }}
 
     steps:
       - name: Checkout code
@@ -293,6 +295,8 @@ jobs:
       - build
       - test
       - vhost
+    env:
+      SSH_HOST_DOMAIN: ${{ secrets.APP_HOST_DOMAIN }}
 
     steps:
       - name: Checkout code
@@ -348,6 +352,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - setup-server-cluster
+    env:
+      SSH_HOST_DOMAIN: ${{ secrets.SERVER_HOST_DOMAIN }}
 
     steps:
       - name: Checkout code
@@ -386,11 +392,9 @@ jobs:
         working-directory: iac_modules/terraform/${{ env.CLOUD }}/vhost/
 
       - name: Update playbook hosts
-        run: |
-          bash observability-platform-pre_setup.sh
+        run: bash observability-platform-pre_setup.sh
         env:
           SSH_HOST_IP: ${{ steps.terraform-output.outputs.server }}
-          SSH_HOST_DOMAIN: server.onwalk.net
         working-directory: playbook/ 
 
       - name: Deploy ansible-playbook Observability Server
@@ -403,6 +407,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - setup-app-cluster
+    env:
+      SSH_HOST_DOMAIN: ${{ secrets.APP_HOST_DOMAIN }}
 
     steps:
       - name: Checkout code
@@ -441,11 +447,9 @@ jobs:
         working-directory: iac_modules/terraform/${{ env.CLOUD }}/vhost/
 
       - name: Update playbook hosts
-        run: |
-          bash observability-platform-pre_setup.sh
+        run: bash observability-platform-pre_setup.sh
         env:
           SSH_HOST_IP: ${{ steps.terraform-output.outputs.app }}
-          SSH_HOST_DOMAIN: app.onwalk.net
         working-directory: playbook/ 
 
       - name: Deploy ansible-playbook Observability Agent
