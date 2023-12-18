@@ -231,7 +231,7 @@ jobs:
       - name: Test aritfacts
         run: echo "to do"
 
-  setup-k3s:
+  setup-server-cluster:
     runs-on: ubuntu-latest
     needs:
       - build
@@ -287,10 +287,68 @@ jobs:
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i hosts/inventory init_k3s_cluster_std -D
         working-directory: playbook/ 
-  deploy-Apps:
+
+  setup-app-cluster:
     runs-on: ubuntu-latest
     needs:
-      - setup-k3s
+      - build
+      - test
+      - vhost
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Pre Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip jq
+          python -m pip install --upgrade pip jinja2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.6.4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS_JSON }}
+
+      - name: Set GitHub Actions output variables
+        id: terraform-output
+        run: |
+          python3 scripts/init.py && terraform init
+          terraform output | while read -r line; do
+             if [ -z "$line" ]; then
+                 break
+             else
+               k_v=$(echo "$line" | tr -d ' ' | awk -F= '{print $1"="$2}')
+               echo "$k_v" >> $GITHUB_OUTPUT
+             fi
+          done
+        working-directory: iac_modules/terraform/${{ env.CLOUD }}/vhost/
+
+      - name: Update playbook hosts
+        run: |
+          bash observability-platform-pre_setup.sh
+        env:
+          SSH_HOST_IP: ${{ steps.terraform-output.outputs.app }}
+        working-directory: playbook/ 
+
+      - name: Setup K3S Cluster
+        shell: bash
+        run: |
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook -i hosts/inventory init_k3s_cluster_std -D
+        working-directory: playbook/ 
+
+  deploy-server:
+    runs-on: ubuntu-latest
+    needs:
+      - setup-server-cluster
 
     steps:
       - name: Checkout code
@@ -339,4 +397,58 @@ jobs:
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
           ansible-playbook -i hosts/inventory init_observability-server -D
+        working-directory: playbook/ 
+
+  deploy-agent:
+    runs-on: ubuntu-latest
+    needs:
+      - setup-app-cluster
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
+
+      - name: Pre Setup
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y python3-pip jq
+          python -m pip install --upgrade pip jinja2
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 1.6.4
+
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_CREDENTIALS_JSON }}
+
+      - name: Set GitHub Actions output variables
+        id: terraform-output
+        run: |
+          python3 scripts/init.py && terraform init
+          terraform output | while read -r line; do
+             if [ -z "$line" ]; then
+                 break
+             else
+               k_v=$(echo "$line" | tr -d ' ' | awk -F= '{print $1"="$2}')
+               echo "$k_v" >> $GITHUB_OUTPUT
+             fi
+          done
+        working-directory: iac_modules/terraform/${{ env.CLOUD }}/vhost/
+
+      - name: Update playbook hosts
+        run: |
+          bash observability-platform-pre_setup.sh
+        env:
+          SSH_HOST_IP: ${{ steps.terraform-output.outputs.app }}
+        working-directory: playbook/ 
+
+      - name: Deploy ansible-playbook Observability Agent
+        run: |
+          export ANSIBLE_HOST_KEY_CHECKING=False
+          ansible-playbook -i hosts/inventory init_observability-agent -D
         working-directory: playbook/ 
