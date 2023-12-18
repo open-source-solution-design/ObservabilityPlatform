@@ -10,7 +10,6 @@ env:
   DNS_AK: ${{ secrets.DNS_AK }}
   DNS_SK: ${{ secrets.DNS_SK }}
   SSH_USER: ${{ secrets.HOST_USER }}
-  SSH_HOST_DOMAIN: ${{ secrets.HOST_DOMAIN }} 
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
 on:
@@ -391,6 +390,7 @@ jobs:
           bash observability-platform-pre_setup.sh
         env:
           SSH_HOST_IP: ${{ steps.terraform-output.outputs.server }}
+          SSH_HOST_DOMAIN: server.onwalk.net
         working-directory: playbook/ 
 
       - name: Deploy ansible-playbook Observability Server
@@ -445,6 +445,7 @@ jobs:
           bash observability-platform-pre_setup.sh
         env:
           SSH_HOST_IP: ${{ steps.terraform-output.outputs.app }}
+          SSH_HOST_DOMAIN: app.onwalk.net
         working-directory: playbook/ 
 
       - name: Deploy ansible-playbook Observability Agent
