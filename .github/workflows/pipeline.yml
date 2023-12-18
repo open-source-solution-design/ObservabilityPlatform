@@ -9,10 +9,6 @@ env:
   TAG: ${{ github.sha }}
   DNS_AK: ${{ secrets.DNS_AK }}
   DNS_SK: ${{ secrets.DNS_SK }}
-  ROOT_PASSWORD: ${{ secrets.ADMIN_INIT_PASSWORD }}
-  SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
-  GITLAB_OIDC_CLIENT_TOKEN: ${{ secrets.GITLAB_OIDC_CLIENT_TOKEN }}
-  HARBOR_OIDC_CLIENT_TOKEN: ${{ secrets.HARBOR_OIDC_CLIENT_TOKEN }}
   SSH_USER: ${{ secrets.HOST_USER }}
   SSH_HOST_DOMAIN: ${{ secrets.HOST_DOMAIN }} 
   SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
@@ -280,7 +276,7 @@ jobs:
 
       - name: Update playbook hosts
         run: |
-          bash pre_setup.sh
+          bash observability-platform-pre_setup.sh
         env:
           SSH_HOST_IP: ${{ steps.terraform-output.outputs.server }}
         working-directory: playbook/ 
@@ -334,7 +330,7 @@ jobs:
 
       - name: Update playbook hosts
         run: |
-          bash pre_setup.sh
+          bash observability-platform-pre_setup.sh
         env:
           SSH_HOST_IP: ${{ steps.terraform-output.outputs.server }}
         working-directory: playbook/ 

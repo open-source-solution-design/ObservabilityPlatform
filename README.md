@@ -100,3 +100,17 @@ Server 相关 secrets 变量
 | traces_oltp_push               | https://data-gateway.<domian>/v1/traces                 |
 | Query Traces                   | https://data-gateway.<domian>/api/traces/{traceId}      |
 | Query Traces (JSON)	         | https://data-gateway.<domian>/api/traces/{traceId}/json |
+
+
+# Reference
+
+1. 可观测平台-2: 开源解决方案
+ https://cloud.tencent.com/developer/article/2363793
+3. 可观测平台-3: 应用系统告警项
+https://cloud.tencent.com/developer/article/2370478
+可观测平台-3.1: Web前端/后端/网关 监控项: 
+https://cloud.tencent.com/developer/article/2370608
+可观测平台-3.2: Cache/MQ/TQ 中间件监控项原创: 
+https://cloud.tencent.com/developer/article/2370613
+可观测平台-3.3: 数据库监控项：
+https://cloud.tencent.com/developer/article/2370615
