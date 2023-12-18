@@ -6,7 +6,7 @@ annotations:
     - name: Upstream Project
       url: https://github.com/prometheus/prometheus
 apiVersion: v2
-appVersion: v2.48.0
+appVersion: v2.48.1
 dependencies:
 - condition: alertmanager.enabled
   name: alertmanager
@@ -50,4 +50,4 @@ sources:
 - https://github.com/prometheus/node_exporter
 - https://github.com/kubernetes/kube-state-metrics
 type: application
-version: 25.8.0
+version: 25.8.2
