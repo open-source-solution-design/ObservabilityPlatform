@@ -9,8 +9,6 @@ env:
   TAG: ${{ github.sha }}
   DNS_AK: ${{ secrets.DNS_AK }}
   DNS_SK: ${{ secrets.DNS_SK }}
-  OSS_AK: ${{ secrets.OSS_AK }}
-  OSS_SK: ${{ secrets.OSS_SK }}
   ROOT_PASSWORD: ${{ secrets.ADMIN_INIT_PASSWORD }}
   SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
   GITLAB_OIDC_CLIENT_TOKEN: ${{ secrets.GITLAB_OIDC_CLIENT_TOKEN }}
@@ -341,20 +339,8 @@ jobs:
           SSH_HOST_IP: ${{ steps.terraform-output.outputs.server }}
         working-directory: playbook/ 
 
-      - name: Deploy Gitlab
+      - name: Deploy ansible-playbook Observability Server
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i hosts/inventory init_gitlab -D
-        working-directory: playbook/ 
-
-      - name: Deploy Harbor
-        run: |
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i hosts/inventory init_harbor -D
-        working-directory: playbook/ 
-
-      - name: Deploy Chartmuseum 
-        run: |
-          export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i hosts/inventory init_chartmuseum -D
+          ansible-playbook -i hosts/inventory init_observability-server -D
         working-directory: playbook/ 
