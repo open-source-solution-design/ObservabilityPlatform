@@ -10,78 +10,19 @@ grafana-agent:
     tag: v6.2
 prometheus:
   enabled: true
+  alertmanager:
+    enabled: false
 promtail:
   enabled: true
   config:
     clients:
-      - url: https://data-gateway.onwalk.net/loki/api/v1/push
+      - url: https://data-gateway.svc.plus/loki/api/v1/push
 deepflow-agent:
   enabled: true
   image:
     repository: artifact.onwalk.net/public/deepflow-agent
     pullPolicy: Always
     tag: v6.2
-kube-state-metrics:
-  enabled: true
-fluent-bit:
-  enabled: true
-  config:
-    inputs: |
-      [INPUT]
-          Name tail
-          Path /var/log/containers/*.log
-          multiline.parser docker, cri
-          Tag kube.*
-          Mem_Buf_Limit 5MB
-          Skip_Long_Lines On
-  
-    filters: |
-      [FILTER]
-          Name kubernetes
-          Match kube.*
-          Merge_Log On
-          Keep_Log Off
-          K8S-Logging.Parser On
-          K8S-Logging.Exclude On
-  
-    outputs: |
-      [OUTPUT]
-          Name cloudwatch_logs
-          region cn-northwest-1
-          Match kube.*
-          log_group_name log_group_name
-          log_stream_name log_stream_name 
-          auto_create_group true
-  
-    customParsers: |
-      [PARSER]
-          Name docker_no_time
-          Format json
-          Time_Keep Off
-          Time_Key time
-          Time_Format %Y-%m-%dT%H:%M:%S.%L
-  
-  daemonSetVolumes:
-    - name: varlibdockercontainers
-      hostPath:
-        path: /var/lib/docker/containers
-    - name: varlogpods
-      hostPath:
-        path: /var/log/pods/
-    - name: varlogdockercontainers
-      hostPath:
-        path: /var/log/containers/
-  daemonSetVolumeMounts:
-    - name: varlogdockercontainers
-      mountPath: /var/log/containers/
-      readOnly: true
-    - name: varlibdockercontainers
-      mountPath: /var/lib/docker/containers
-      readOnly: true
-    - name: varlogpods
-      mountPath: /var/log/pods/
-      readOnly: true
-  logLevel: info
 
 imagePullSecrets: []
 nameOverride: ""
