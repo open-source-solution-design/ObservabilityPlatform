@@ -35,6 +35,9 @@ prometheus:
   prometheus-pushgateway:
     enabled: false
   server:
+    remote_write:
+      - name: remote_prometheus
+        url: https://data-gateway.svc.plus/api/v1/write
     ingress:
       ingressClassName: nginx
       hosts:
