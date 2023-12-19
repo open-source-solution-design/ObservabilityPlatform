@@ -382,7 +382,7 @@ jobs:
         shell: bash
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i hosts/inventory init_k3s_cluster_std -D
+          ansible-playbook -i hosts/inventory init_k3s_cluster_std -e "cluster_name=monitor" -D
         working-directory: playbook/ 
 
   setup-app-cluster:
@@ -441,7 +441,7 @@ jobs:
         shell: bash
         run: |
           export ANSIBLE_HOST_KEY_CHECKING=False
-          ansible-playbook -i hosts/inventory init_k3s_cluster_std -D
+          ansible-playbook -i hosts/inventory init_k3s_cluster_std -e "cluster_name=app" -D
         working-directory: playbook/ 
 
   deploy-server:
