@@ -94,6 +94,7 @@ Server 相关 secrets 变量
 | querying(promql, logql, tempo) | http://data-gateway.<domian>                            |
 | metrics_query                  | https://prometheus.<domian>/api/v1/query                |
 | metrics_remote_write           | https://prometheus.<domian>/api/v1/remote/write         |
+| logql_remote_query             | https://data-gateway.<domian>/loki/api/v1/query         |
 | logql_remote_write             | https://data-gateway.<domian>/loki/api/v1/push          |
 | traces_tempo_push              | https://data-gateway.<domian>/tempo/api/push            |
 | traces_zipkin_push             | https://data-gateway.<domian>/api/v2/spans              |

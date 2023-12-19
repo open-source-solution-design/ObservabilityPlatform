@@ -8,6 +8,8 @@ grafana-agent:
     repository: artifact.onwalk.net/public/deepflow-agent
     pullPolicy: Always
     tag: v6.2
+kube-state-metrics:
+  enabled: false
 prometheus:
   enabled: true
   alertmanager:
