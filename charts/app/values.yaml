@@ -4,6 +4,16 @@
 
 replicaCount: 1
 
+probes:
+  liveness:
+    enabled: false
+    path: /
+    port: http
+  readiness:
+    enabled: false
+    path: /
+    port: http
+
 image:
   repository: nginx
   pullPolicy: IfNotPresent
