@@ -1,0 +1,34 @@
+name: Build Chart  
+
+on:
+  pull_request:
+  push:
+    paths:
+      - '.github/workflows/build-chart.yaml'
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  build-chart:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Initialization environment
+      shell: bash
+      run: |
+        sudo apt update
+        sudo apt install git -y
+        sudo curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+        helm plugin install https://github.com/chartmuseum/helm-push.git
+
+    - name: Build and Push App chart
+      working-directory: charts/server
+      shell: bash
+      run: |
+        helm repo add sync https://charts.onwalk.net
+        helm repo up
+        helm cm-push -u admin -p "${{ secrets.HELM_REPO_PASSWORD }}" --force ./ sync
+        ls -l
