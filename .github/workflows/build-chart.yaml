@@ -25,7 +25,7 @@ jobs:
         helm plugin install https://github.com/chartmuseum/helm-push.git
 
     - name: Build and Push App chart
-      working-directory: charts/server
+      working-directory: charts/app
       shell: bash
       run: |
         helm repo add sync https://charts.onwalk.net
