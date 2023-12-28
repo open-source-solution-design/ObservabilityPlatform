@@ -1,0 +1,90 @@
+{{- if .Values.canary.enabled }}
+apiVersion: flagger.app/v1beta1
+kind: Canary
+metadata:
+  name: {{ template "app.fullname" . }}
+  labels:
+    app: {{ template "app.name" . }}
+    chart: {{ template "app.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+spec:
+  provider: {{ .Values.canary.provider }}
+  targetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ template "app.name" . }}
+  # ingress reference
+  ingressRef:
+    apiVersion: networking.k8s.io/v1
+    kind: Ingress
+    name: {{ template "app.fullname" . }}
+  progressDeadlineSeconds: 60
+  service:
+    port: {{ .Values.service.port }}
+    targetPort: {{ .Values.service.port }}
+  analysis:
+    interval: {{ .Values.canary.analysis.interval }}
+    threshold: {{ .Values.canary.analysis.threshold }}
+    maxWeight: {{ .Values.canary.analysis.maxWeight }}
+    stepWeight: {{ .Values.canary.analysis.stepWeight }}
+    metrics:
+    - name: request-success-rate
+      threshold: {{ .Values.canary.thresholds.successRate }}
+      interval: 1m
+    - name: request-duration
+      threshold: {{ .Values.canary.thresholds.latency }}
+      interval: 1m
+   {{- if .Values.canary.metric_template.enabled }}
+      - name: "404s percentage"
+        templateRef:
+          name: not-found-percentage
+        thresholdRange:
+          max: 5
+        interval: 1m
+   {{- endif }}
+    webhooks:
+      {{- if .Values.canary.acceptance-test.enabled }}
+      - name: acceptance-test
+        type: pre-rollout
+        url: {{ .Values.canary.load_test_url }}
+        timeout: 10s
+        metadata:
+          type: bash
+          cmd: "{{ .Values.canary.acceptance-test.cmd }}"
+      {{- end }}
+      {{- if .Values.canary.loadtest.enabled }}
+      - name: load-test
+        timeout: 5s
+        metadata:
+          cmd: "{{ .Values.canary.loadtest.cmd }}"
+      {{- end }}
+{{- if .Values.canary.metric_template.enabled }}
+apiVersion: flagger.app/v1beta1
+kind: MetricTemplate
+metadata:
+  name: not-found-percentage
+  namespace: canary
+spec:
+  provider:
+    type: prometheus
+    address: http://flagger-prometheus.apisix:9090
+  query: |
+    sum(
+      rate(
+        apisix_http_status{
+          route=~"{{ namespace }}_{{ route }}-{{ target }}-canary_.+",
+          code!~"4.."
+        }[{{ interval }}]
+      )
+    )
+    /
+    sum(
+      rate(
+        apisix_http_status{
+          route=~"{{ namespace }}_{{ route }}-{{ target }}-canary_.+"
+        }[{{ interval }}]
+      )
+    ) * 100
+  {{- end }}
+{{- end }}
