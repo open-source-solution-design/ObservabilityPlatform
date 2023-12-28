@@ -69,7 +69,6 @@ probes:
     path: /
     port: http
 
-
 canary:
   enabled: true
   provider: nginx
@@ -79,7 +78,7 @@ canary:
     cmd: "curl -sd 'test' http://podinfo-canary/token | grep token"
   loadtest:
     enabled: true
-    cmd: "hey -z 1m -q 5 -c 2 http://{{ template "podinfo.fullname" . }}.{{ .Release.Namespace }}:{{ .Values.service.port }}"
+    cmd: "hey -z 1m -q 5 -c 2 http://podinfo-canary/token""
   metric_template:
     enabled: false
   thresholds:
