@@ -55,7 +55,7 @@ prometheus:
       rule_files:
         - /etc/config/recording_rules.yml
         - /etc/config/alerting_rules.yml
-influxdata:
+influxdb:
   enabled: true
   ingress:
     enabled: true
