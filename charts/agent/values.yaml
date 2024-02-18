@@ -12,6 +12,12 @@ kube-state-metrics:
   enabled: false
 telegraf:
   enabled: true
+  config:
+    outputs:
+      - influxdb:
+          urls:
+            - "https://influxdb.onwalk.net"
+          database: "telegraf"
 prometheus:
   enabled: true
   alertmanager:

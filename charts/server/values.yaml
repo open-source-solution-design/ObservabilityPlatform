@@ -55,6 +55,14 @@ prometheus:
       rule_files:
         - /etc/config/recording_rules.yml
         - /etc/config/alerting_rules.yml
+influxdata:
+  enabled: true
+  ingress:
+    enabled: true
+    tls: true
+    secretName: observable-server-tls
+    hostname: influxdb.onwalk.net
+    className: nginx
 alertmanger:
   enabled: true
   ingress:
