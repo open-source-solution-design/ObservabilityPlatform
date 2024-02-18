@@ -24,7 +24,7 @@ dependencies:
   condition: alertmanger.enabled
   version: "0.22.2"
   repository: "https://prometheus-community.github.io/helm-charts"
-- name: influxdata
-  condition: influxdata.enabled
+- name: influxdb
+  condition: influxdb.enabled
   version: "4.12.5"
   repository: "https://helm.influxdata.com"
