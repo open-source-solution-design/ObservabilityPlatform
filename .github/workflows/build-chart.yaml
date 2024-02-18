@@ -9,6 +9,17 @@ on:
     branches:
       - main
 
+env:
+  TZ: Asia/Shanghai
+  REPO: "artifact.onwalk.net"
+  IMAGE: base/${{ github.repository }} 
+  TAG: ${{ github.sha }}
+  DNS_AK: ${{ secrets.DNS_AK }}
+  DNS_SK: ${{ secrets.DNS_SK }}
+  PASSWORD: ${{ secrets.ADMIN_INIT_PASSWORD }}
+  DEBIAN_FRONTEND: noninteractive
+  HELM_EXPERIMENTAL_OCI: 1
+
 jobs:
   build-server-agent-chart:
     runs-on: ubuntu-latest
