@@ -3,25 +3,9 @@
 # Declare variables to be passed into your templates.
 
 grafana-agent:
-  enabled: false
-  image:
-    repository: artifact.onwalk.net/public/deepflow-agent
-    pullPolicy: Always
-    tag: v6.2
+  enabled: true
 kube-state-metrics:
-  enabled: false
-telegraf:
   enabled: true
-  config:
-    outputs:
-      - influxdb:
-          urls:
-            - "https://influxdb.onwalk.net"
-          database: "telegraf"
-prometheus:
-  enabled: true
-  alertmanager:
-    enabled: false
 promtail:
   enabled: true
   config:
@@ -33,6 +17,12 @@ deepflow-agent:
     repository: artifact.onwalk.net/public/deepflow-agent
     pullPolicy: Always
     tag: v6.2
+prometheus:
+  enabled: false
+  prometheus-node-exporter:
+    enabled: true
+  alertmanager:
+    enabled: false
 
 imagePullSecrets: []
 nameOverride: ""
