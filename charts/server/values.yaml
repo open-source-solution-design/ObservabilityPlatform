@@ -20,7 +20,7 @@ deepflow:
           hosts:
             - grafana.onwalk.net
 neo4j:
-  enabled: true
+  enabled: false
   neo4j:
     name: neo4j
   volumes:
