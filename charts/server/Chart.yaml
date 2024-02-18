@@ -1,6 +1,6 @@
 name: observableserver
 type: application
-version: 0.1.6
+version: 0.1.7
 apiVersion: v2
 description: A Helm chart for Observable Server
 dependencies:

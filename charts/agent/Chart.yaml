@@ -1,6 +1,6 @@
 name: observabilityagent
 type: application
-version: 0.1.6
+version: 0.1.7
 apiVersion: v2
 description: A Helm chart for Observable Stack agent
 dependencies:
@@ -27,3 +27,7 @@ dependencies:
   condition: kube-state-metrics.enabled
   version: "4.24.0"
   repository: "https://prometheus-community.github.io/helm-charts"
+- name: telegraf
+  condition: telegraf.enabled
+  version: "1.8.41"
+  repository: "https://helm.influxdata.com"

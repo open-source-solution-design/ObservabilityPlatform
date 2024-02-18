@@ -10,6 +10,8 @@ grafana-agent:
     tag: v6.2
 kube-state-metrics:
   enabled: false
+telegraf:
+  enabled: true
 prometheus:
   enabled: true
   alertmanager:
