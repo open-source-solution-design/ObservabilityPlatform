@@ -1,6 +1,6 @@
 name: observabilityagent
 type: application
-version: 0.1.7
+version: 0.1.8
 apiVersion: v2
 description: A Helm chart for Observable Stack agent
 dependencies:
@@ -22,6 +22,10 @@ dependencies:
 - name: prometheus
   condition: prometheus.enabled
   version: "19.0.1"
+  repository: "https://prometheus-community.github.io/helm-charts"
+- name: node-exporter
+  condition: node-exporter.enabled
+  version: "4.30.2"
   repository: "https://prometheus-community.github.io/helm-charts"
 - name: kube-state-metrics
   condition: kube-state-metrics.enabled

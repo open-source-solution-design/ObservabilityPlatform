@@ -2,9 +2,11 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-grafana-agent:
+node-exporter:
   enabled: true
 kube-state-metrics:
+  enabled: true
+grafana-agent:
   enabled: true
 promtail:
   enabled: true
@@ -19,10 +21,8 @@ deepflow-agent:
     tag: v6.2
 prometheus:
   enabled: false
-  prometheus-node-exporter:
-    enabled: true
-  alertmanager:
-    enabled: false
+telegraf:
+  enabled: false
 
 imagePullSecrets: []
 nameOverride: ""
