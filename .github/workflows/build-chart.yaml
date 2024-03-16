@@ -76,6 +76,7 @@ jobs:
         rm -rvf fluent-bit ; helm fetch fluent/fluent-bit --untar
         rm -rvf grafana-agent-operator ; helm fetch grafana/grafana-agent-operator --untar
         rm -rvf deepflow-agent ; helm fetch deepflow/deepflow-agent --version 6.2.6 --untar
+        rm -rvf prometheus-node-exporter ; helm fetch prometheus-community/prometheus-node-exporter --untar
         rm -rvf kube-state-metrics ; helm fetch prometheus-community/kube-state-metrics --untar
         rm -rvf prometheus ; helm fetch prometheus-community/prometheus --version=18.4.0 --untar
         ls -l && rm *.tgz -f
